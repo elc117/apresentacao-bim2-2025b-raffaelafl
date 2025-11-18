@@ -2,6 +2,25 @@
 ---
 
 ## 📖 Respondendo exercicios
+ Considerando esse código:
+
+class SharedObjectExample {
+  private int sharedValue;
+
+  public SharedObjectExample(int value) {
+    this.sharedValue = value;
+  }
+
+  public void updateValue(int newValue) {
+    sharedValue = newValue;
+  }
+
+  public int getValue() {
+    return sharedValue;
+  }
+}
+ 
+
 
 ### 1 Considerando o código acima, qual das linhas de código abaixo instancia um objeto da classe SharedObjectExample?
 a)SharedObjectExample e = new SharedObjectExample();
