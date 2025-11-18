@@ -21,6 +21,8 @@ d)Objetos da classe SharedObjectExample são automaticamente synchronized, torna
 
 A resposta correta é a b, o compartilhamento dos objetos será definido por quem usa a classe, logo veremos duas formas de compartilhamento de objetos entre threads.
 
+---
+
 ## 📖 Compartilhamento de objetos entre threads
 
 ### 🔹Passando referência (local)
@@ -68,12 +70,82 @@ https://github.com/user-attachments/assets/8c2ef78b-cf4d-45f2-a121-140cf1f4e834
 
 
 
+---
+
+## 📖 Dificuldades
+ A parte mais fácil da atividade foi responder o quiz, pois eram perguntas mais básicas sobre o conteúdo. Criar os códigos de exemplo também foi tranquilo, fiz um exemplo bem básico em que as threads apenas contam até 10. O que achei mais díficil foi compreender qual a diferença entre as duas formas de compartilhar objetos entre threads, mas acredito ter conseguido.
+
+
+---
+
+## 📖 Respondendo exercicios
+
+### (1) Passando referência 
+
+public class MainRef {
+    public static void main(String[] args) throws InterruptedException {
+        SharedObjectExample sharedObj = new SharedObjectExample(0);
+
+        Runnable task = () -> {
+            for (int i = 0; i < 5; i++) {
+                int newValue = sharedObj.getValue() + 1;
+                sharedObj.updateValue(newValue);
+                System.out.println(Thread.currentThread().getName() + " -> " + sharedObj.getValue());
+            }
+        };
+
+        Thread t1 = new Thread(task, "Thread-1");
+        Thread t2 = new Thread(task, "Thread-2");
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Final: " + sharedObj.getValue());
+    }
+}
+
+
+
+### (2) Acessando atributo static em uma classe
+
+public class MainStatic {
+    public static void main(String[] args) throws InterruptedException {
+
+        Runnable task = () -> {
+            for (int i = 0; i < 5; i++) {
+                synchronized (StaticShared.sharedObj) {
+                    int newValue = StaticShared.sharedObj.getValue() + 1;
+                    StaticShared.sharedObj.updateValue(newValue);
+                    System.out.println(Thread.currentThread().getName() + " -> " + StaticShared.sharedObj.getValue());
+                }
+            }
+        };
+
+        Thread t1 = new Thread(task, "Thread-A");
+        Thread t2 = new Thread(task, "Thread-B");
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Final: " + StaticShared.sharedObj.getValue());
+    }
+}
+
+
 
 ---
 
 ## FONTES:
 
 https://pt.stackoverflow.com/questions/138442/concorrência-e-compartilhamento-de-memória-entre-threads
+
+https://pt.stackoverflow.com/questions/59437/qual-a-diferença-entre-passagem-por-valor-e-passagem-por-referência
 
 https://www.quora.com/How-do-I-share-an-object-between-threads-in-Java
 
@@ -83,6 +155,9 @@ https://www.devmedia.com.br/modificadores-de-acesso-do-java/27065
 
 https://chroniclesofapragmaticprogrammer.substack.com/p/java-conceitos
 
+https://www.ic.unicamp.br/~cmrubira/aacesta/java/javatut12.html#RTFToC55
+
 https://liascript.github.io/course/?https://raw.githubusercontent.com/AndreaInfUFSM/elc117-2025b/main/classes/28/README.md#17
+
 ---
 
